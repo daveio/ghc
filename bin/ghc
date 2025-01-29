@@ -3,4 +3,5 @@
 # frozen_string_literal: true
 
 require 'ghc'
+
 GHC.new.run

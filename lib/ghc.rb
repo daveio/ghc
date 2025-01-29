@@ -4,6 +4,8 @@
 
 require 'rubygems'
 require 'commander'
+require 'terminal-table'
+require_relative 'metadata'
 
 # Main application class for GHC command-line interface
 class GHC
@@ -19,9 +21,9 @@ class GHC
   private
 
   def setup_program
-    program :name, 'ghc'
-    program :version, '0.0.1'
-    program :description, 'GitHub helper'
+    program :name, Metadata.name
+    program :version, Metadata.version
+    program :description, Metadata.description
   end
 
   def setup_commands

@@ -54,7 +54,8 @@ module Metadata
 
   def self.dependencies
     {
-      'commander' => '~> 5.0.0'
+      'commander' => '~> 5.0.0',
+      'terminal-table' => '~> 4.0.0'
     }
   end
 
