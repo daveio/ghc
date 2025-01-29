@@ -9,3 +9,6 @@ Metrics/BlockLength:
   Exclude:
     - spec/**/*
     - "*.gemspec"
+
+Style/RegexpLiteral:
+  EnforcedStyle: percent_r

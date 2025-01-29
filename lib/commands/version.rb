@@ -2,6 +2,7 @@
 
 require_relative '../metadata'
 
+# Commands module contains all CLI command implementations
 module Commands
   # Command to get GHC version
   class Version
