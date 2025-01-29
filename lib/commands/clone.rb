@@ -12,16 +12,44 @@ module Commands
 
     def run
       repo = @args.first
-      puts "Would clone #{repo}"
+      puts "Would clone #{parse_repo(repo)}"
     end
-  end
 
-  def detect_type(repo)
-    return :github if repo.match %r{^[a-zA-Z]+/[a-zA-Z]+$}
-    return :ssh if repo.match %r{^[a-zA-Z]+@[a-zA-Z]+\.[a-zA-Z]+\.?[a-zA-Z]+?:/?[a-zA-Z]+}
-    return :long_https if repo.match %r{^https://[a-zA-Z]+\.[a-zA-Z]+\.?[a-zA-Z]+?/[a-zA-Z]+}
-    return :short_https if repo.match %r{^[a-zA-Z]+\.[a-zA-Z]+\.?[a-zA-Z]+?/[a-zA-Z]+}
+    def detect_type(repo)
+      return :github if repo.match %r{^[a-zA-Z0-9]+/[a-zA-Z0-9]+$}
+      return :ssh_user if repo.match %r{^[a-zA-Z0-9]+@[a-zA-Z0-9]+\.[a-zA-Z0-9]+\.?[a-zA-Z0-9]+?:/?[a-zA-Z0-9]+}
+      return :ssh_no_user if repo.match %r{^[a-zA-Z0-9]+\.[a-zA-Z0-9]+\.?[a-zA-Z0-9]+?:/?[a-zA-Z0-9]+}
+      return :long_https if repo.match %r{^https://[a-zA-Z0-9]+\.[a-zA-Z0-9]+\.?[a-zA-Z0-9]+?/[a-zA-Z0-9]+}
+      return :short_https if repo.match %r{^[a-zA-Z0-9]+\.[a-zA-Z0-9]+\.?[a-zA-Z0-9]+?/[a-zA-Z0-9]+}
 
-    :unknown
+      :unknown
+    end
+
+    # trunk-ignore(rubocop/Metrics/MethodLength,rubocop/Metrics/CyclomaticComplexity)
+    def parse_repo(repo)
+      case detect_type(repo)
+      when :github
+        user, repo = repo.split('/')
+        proto = user == Metadata.github_user ? 'git' : 'https'
+        return {
+          host: 'github.com',
+          proto: proto,
+          repo: repo,
+          ssh_user: 'git',
+          user: user
+        }
+      when :ssh_user
+        "#{repo} ssh with user"
+      when :ssh_no_user
+        "#{repo} ssh without user"
+      when :long_https
+        "#{repo} long https"
+      when :short_https
+        "#{repo} short https"
+      when :unknown
+        abort("Couldn't detect repo type for #{repo}. File a bug report at https://github.com/daveio/ghc/issues.")
+      end
+      nil
+    end
   end
 end

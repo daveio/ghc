@@ -67,4 +67,26 @@ module Metadata
       'rspec' => '~> 3.13.0'
     }
   end
+
+  def self.github_user
+    github_user = ENV.fetch('GHC_GITHUB_USER', false)
+    abort('GHC_GITHUB_USER is not set. Set it to your GitHub username.') unless github_user
+
+    github_user
+  end
+
+  def self.root
+    root = ENV.fetch('GHC_ROOT', false)
+    abort('GHC_ROOT is not set. Set it to a writable directory.') unless root
+    abort('GHC_ROOT is set but does not point to a valid writable directory.') unless check_ghc_root(root)
+
+    root
+  end
+
+  def self.check_ghc_root(ghc_root)
+    return false unless File.directory?(ghc_root)
+    return false unless File.writable?(ghc_root)
+
+    true
+  end
 end

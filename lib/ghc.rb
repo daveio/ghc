@@ -14,7 +14,6 @@ class GHC
   # include whatever modules you need
 
   def run
-    abort('GHC_ROOT is not set or is not a valid writabledirectory') unless check_ghc_root(ENV.fetch('GHC_ROOT', nil))
     setup_program
     setup_commands
     run!
@@ -27,15 +26,6 @@ class GHC
     program :version, Metadata.version
     program :description, Metadata.description
     program :help, 'Documentation', 'https://github.com/daveio/ghc'
-  end
-
-  def check_ghc_root(ghc_root)
-    return false if ghc_root.nil?
-    return false if ghc_root.empty?
-    return false unless File.directory?(ghc_root)
-    return false unless File.writable?(ghc_root)
-
-    true
   end
 
   def setup_commands
