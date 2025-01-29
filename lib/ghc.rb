@@ -1,5 +1,57 @@
-class Ghc
-  def self.hi
-    puts "Hello world!"
+# frozen_string_literal: true
+
+# code: language=ruby
+
+require 'rubygems'
+require 'commander'
+
+# Main application class for GHC command-line interface
+class GHC
+  include Commander::Methods
+  # include whatever modules you need
+
+  def run
+    setup_program
+    setup_commands
+    run!
+  end
+
+  private
+
+  def setup_program
+    program :name, 'ghc'
+    program :version, '0.0.1'
+    program :description, 'GitHub helper'
+  end
+
+  def setup_commands
+    setup_clone_command
+    setup_version_command
+  end
+
+  def setup_clone_command
+    command :clone do |c|
+      c.syntax = 'ghc clone [options]'
+      c.summary = ''
+      c.description = ''
+      c.example 'description', 'command example'
+      c.option '--some-switch', 'Some switch that does something'
+      c.action do |args, options|
+        # Do something or c.when_called Ghc::Commands::Clone
+      end
+    end
+  end
+
+  def setup_version_command
+    command :version do |c|
+      c.syntax = 'ghc version [options]'
+      c.summary = ''
+      c.description = ''
+      c.example 'description', 'command example'
+      c.option '--some-switch', 'Some switch that does something'
+      c.action do |args, options|
+        # Do something or c.when_called Ghc::Commands::Version
+      end
+    end
   end
 end

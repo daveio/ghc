@@ -1,21 +1,24 @@
 # frozen_string_literal: true
 
+require_relative 'lib/metadata'
+
 Gem::Specification.new do |s|
-  s.name        = 'ghc'
-  s.version     = '0.0.3'
-  s.summary     = 'GitHub helper'
-  s.description = 'A tool to help manage GitHub repositories'
-  s.authors     = ['Dave Williams']
-  s.email       = 'dave@dave.io'
-  s.files       = ['lib/ghc.rb']
-  s.homepage    =
-    'https://rubygems.org/gems/ghc'
-  s.license = 'MIT'
-  s.required_ruby_version = '>= 3.4.0'
-  s.executables << 'ghc'
-  # dependencies
-  # s.add_dependency 'name', '~> 1.23.4'
-  s.add_dependency 'commander', '~> 5.0.0'
-  # development dependencies
-  # s.add_development_dependency 'name', '~> 1.23.4'
+  s.name        = Metadata.name
+  s.version     = Metadata.version
+  s.summary     = Metadata.summary
+  s.description = Metadata.description
+  s.authors     = Metadata.authors
+  s.email       = Metadata.email
+  s.files       = Metadata.files
+  s.homepage    = Metadata.homepage
+  s.license     = Metadata.license
+  s.required_ruby_version = Metadata.required_ruby_version || '>= 3.4.1'
+  s.executables = Metadata.executables
+  Metadata.dependencies.each_key do |key|
+    s.add_dependency(key, Metadata.dependencies[key])
+  end
+  Metadata.development_dependencies.each_key do |key|
+    s.add_development_dependency(key, Metadata.development_dependencies[key])
+  end
+  s.metadata['rubygems_mfa_required'] = 'true'
 end

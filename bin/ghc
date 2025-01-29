@@ -3,4 +3,4 @@
 # frozen_string_literal: true
 
 require 'ghc'
-puts Ghc.hi
+GHC.new.run
