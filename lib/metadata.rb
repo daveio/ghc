@@ -49,7 +49,7 @@ module Metadata
   end
 
   def self.required_ruby_version
-    '>= 3.4.0'
+    '>= 3.3.6'
   end
 
   def self.dependencies
