@@ -14,7 +14,7 @@ Paths will be created relative to this root directory. For example, a GitHub che
 
 ### `GHC_GITHUB_USER`
 
-Set the `GHC_GITHUB_USER` environment variable to your GitHub username. This is used to switch to using SSH to check out repositories that you own, with HTTPS used for other users' repositories.
+Set the `GHC_GITHUB_USER` environment variable to your GitHub username. This is used to switch to using SSH to check out repositories that you own, with HTTPS used for other users' repositories. `ghc` will abort if it is not set.
 
 ### `sh` / `bash` / `zsh`
 
