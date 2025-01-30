@@ -1,5 +1,7 @@
 # frozen_string_literal: true
 
+require 'etc'
+
 # Commands module contains all CLI command implementations
 module Commands
   # Command to clone repositories
@@ -36,7 +38,9 @@ module Commands
           proto: proto,
           repo: repo,
           ssh_user: 'git',
-          user: user
+          github_user: user,
+          https_url: "https://github.com/#{user}/#{repo}.git",
+          ssh_url: "git@github.com:#{user}/#{repo}.git"
         }
       when :ssh_user
         matches = repo.match %r{^(?<user>[a-zA-Z0-9_\-]+)@(?<host>[a-zA-Z0-9\-.]+):(?<path>.*)$}
@@ -44,11 +48,18 @@ module Commands
           host: matches[:host],
           proto: 'ssh',
           repo: matches[:path],
-          ssh_user: 'git',
-          user: matches[:user]
+          ssh_user: matches[:user],
+          github_user: nil
         }
       when :ssh_no_user
-        "#{repo} ssh without user"
+        matches = repo.match %r{^(?<host>[a-zA-Z0-9\-.]+):(?<path>.*)$}
+        return {
+          host: matches[:host],
+          proto: 'ssh',
+          repo: matches[:path],
+          ssh_user: Etc.getlogin,
+          github_user: nil
+        }
       when :long_https
         "#{repo} long https"
       when :short_https
