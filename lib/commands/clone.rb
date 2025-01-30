@@ -16,11 +16,11 @@ module Commands
     end
 
     def detect_type(repo)
-      return :github if repo.match %r{^[a-zA-Z0-9]+/[a-zA-Z0-9]+$}
-      return :ssh_user if repo.match %r{^[a-zA-Z0-9]+@[a-zA-Z0-9]+\.[a-zA-Z0-9]+\.?[a-zA-Z0-9]+?:/?[a-zA-Z0-9]+}
-      return :ssh_no_user if repo.match %r{^[a-zA-Z0-9]+\.[a-zA-Z0-9]+\.?[a-zA-Z0-9]+?:/?[a-zA-Z0-9]+}
-      return :long_https if repo.match %r{^https://[a-zA-Z0-9]+\.[a-zA-Z0-9]+\.?[a-zA-Z0-9]+?/[a-zA-Z0-9]+}
-      return :short_https if repo.match %r{^[a-zA-Z0-9]+\.[a-zA-Z0-9]+\.?[a-zA-Z0-9]+?/[a-zA-Z0-9]+}
+      return :github if repo.match %r{^[a-zA-Z0-9_\-]+/[a-zA-Z0-9_\-]+$}
+      return :ssh_user if repo.match %r{^[a-zA-Z0-9_\-]+@[a-zA-Z0-9\-.]+:.*$}
+      return :ssh_no_user if repo.match %r{^[a-zA-Z0-9\-.]+:.*$}
+      return :long_https if repo.match %r{^https://[a-zA-Z0-9\-.]+/.*$}
+      return :short_https if repo.match %r{^[a-zA-Z0-9\-.]+/.*$}
 
       :unknown
     end
@@ -39,7 +39,14 @@ module Commands
           user: user
         }
       when :ssh_user
-        "#{repo} ssh with user"
+        matches = repo.match %r{^(?<user>[a-zA-Z0-9]+)@(?<host>[a-zA-Z0-9]+\.[a-zA-Z0-9]+\.?[a-zA-Z0-9]+?):(?<path>.*)$}
+        return {
+          host: matches[:host],
+          proto: 'ssh',
+          repo: matches[:path],
+          ssh_user: 'git',
+          user: matches[:user]
+        }
       when :ssh_no_user
         "#{repo} ssh without user"
       when :long_https
