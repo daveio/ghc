@@ -39,7 +39,7 @@ module Commands
           user: user
         }
       when :ssh_user
-        matches = repo.match %r{^(?<user>[a-zA-Z0-9]+)@(?<host>[a-zA-Z0-9]+\.[a-zA-Z0-9]+\.?[a-zA-Z0-9]+?):(?<path>.*)$}
+        matches = repo.match %r{^(?<user>[a-zA-Z0-9_\-]+)@(?<host>[a-zA-Z0-9\-.]+):(?<path>.*)$}
         return {
           host: matches[:host],
           proto: 'ssh',
