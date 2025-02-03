@@ -27,7 +27,7 @@ module Commands
       :unknown
     end
 
-    # trunk-ignore(rubocop/Metrics/MethodLength,rubocop/Metrics/CyclomaticComplexity)
+    # trunk-ignore(rubocop/Metrics/MethodLength,rubocop/Metrics/CyclomaticComplexity,rubocop/Metrics/AbcSize)
     def parse_repo(repo)
       case detect_type(repo)
       when :github
@@ -61,7 +61,14 @@ module Commands
           github_user: nil
         }
       when :long_https
-        "#{repo} long https"
+        matches = repo.match %r{^(?<proto>https://[a-zA-Z0-9\-.]+)/(?<path>.*)$}
+        return {
+          host: matches[:host],
+          proto: matches[:proto],
+          repo: matches[:path],
+          ssh_user: nil,
+          github_user: nil
+        }
       when :short_https
         "#{repo} short https"
       when :unknown
