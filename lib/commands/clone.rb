@@ -13,8 +13,14 @@ module Commands
     end
 
     def run
-      repo = @args.first
-      puts "Would clone #{parse_repo(repo)}"
+      repo = parse_repo(@args.first)
+      puts "host: #{repo[:host]}"
+      puts "proto: #{repo[:proto]}"
+      puts "repo: #{repo[:repo]}"
+      puts "ssh_user: #{repo[:ssh_user]}"
+      puts "github_user: #{repo[:github_user]}"
+      puts "https_url: #{repo[:https_url]}"
+      puts "ssh_url: #{repo[:ssh_url]}"
     end
 
     def detect_type(repo)
@@ -49,7 +55,9 @@ module Commands
           proto: 'ssh',
           repo: matches[:path],
           ssh_user: matches[:user],
-          github_user: nil
+          github_user: nil,
+          https_url: nil,
+          ssh_url: nil
         }
       when :ssh_no_user
         matches = repo.match %r{^(?<host>[a-zA-Z0-9\-.]+):(?<path>.*)$}
@@ -58,19 +66,32 @@ module Commands
           proto: 'ssh',
           repo: matches[:path],
           ssh_user: Etc.getlogin,
-          github_user: nil
+          github_user: nil,
+          https_url: nil,
+          ssh_url: nil
         }
       when :long_https
-        matches = repo.match %r{^(?<proto>https://[a-zA-Z0-9\-.]+)/(?<path>.*)$}
+        matches = repo.match %r{^https://(?<host>[a-zA-Z0-9\-.]+)/(?<path>.*)$}
         return {
           host: matches[:host],
-          proto: matches[:proto],
+          proto: 'https',
           repo: matches[:path],
           ssh_user: nil,
-          github_user: nil
+          github_user: nil,
+          https_url: nil,
+          ssh_url: nil
         }
       when :short_https
-        "#{repo} short https"
+        matches = repo.match %r{^(?<host>[a-zA-Z0-9\-.]+)/(?<path>.*)$}
+        return {
+          host: matches[:host],
+          proto: 'https',
+          repo: matches[:path],
+          ssh_user: nil,
+          github_user: nil,
+          https_url: nil,
+          ssh_url: nil
+        }
       when :unknown
         abort("Couldn't detect repo type for #{repo}. File a bug report at https://github.com/daveio/ghc/issues.")
       end
