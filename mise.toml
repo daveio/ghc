@@ -1,0 +1,8 @@
+[env]
+GHC_MISE_ACTIVE = "true"
+
+[settings]
+env_file = '.env'
+
+[tools]
+ruby = '3.4.2'
