@@ -1,7 +1,0 @@
-#!/usr/bin/env ruby
-# code: language=ruby
-# frozen_string_literal: true
-
-require 'ghc'
-
-GHC.new.run
