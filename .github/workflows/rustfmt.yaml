@@ -1,7 +1,10 @@
-name: "rustfmt"
+name: rustfmt
 on:
   push:
   pull_request:
+
+permissions:
+  contents: read
 
 jobs:
   formatting:

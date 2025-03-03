@@ -1,12 +1,17 @@
 on: push
 name: clippy
 
+permissions:
+  contents: read
+
 # Make sure CI fails on all warnings, including Clippy lints
 env:
-  RUSTFLAGS: "-Dwarnings"
+  RUSTFLAGS: -Dwarnings
 
 jobs:
-  clippy_check:
+  clippy:
+    permissions:
+      contents: read
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4

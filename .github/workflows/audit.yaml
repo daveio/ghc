@@ -1,9 +1,13 @@
-name: "audit"
+name: audit
+
+permissions:
+  contents: read
+
 on:
   push:
     paths:
       # Run if workflow changes
-      - ".github/workflows/audit.yaml"
+      - .github/workflows/audit.yaml
       # Run on changed dependencies
       - "**/Cargo.toml"
       - "**/Cargo.lock"
@@ -11,7 +15,7 @@ on:
       - "**/audit.toml"
   # Rerun periodicly to pick up new advisories
   schedule:
-    - cron: "0 0 * * *"
+    - cron: 0 0 * * *
   # Run manually
   workflow_dispatch:
 
