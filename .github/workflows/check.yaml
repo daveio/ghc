@@ -15,7 +15,7 @@ env:
 
 jobs:
   rustfmt:
-    name: cargo fmt
+    name: rustfmt
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
